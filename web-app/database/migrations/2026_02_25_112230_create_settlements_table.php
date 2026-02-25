@@ -13,6 +13,16 @@ return new class extends Migration
     {
         Schema::create('settlements', function (Blueprint $table) {
             $table->id();
+            $table->decimal('amount', 10, 2);
+
+
+            $table->enum('type', ['NORMAL', 'DEBT_TRANSFER'])->default('NORMAL');
+
+            $table->timestamp('paid_at')->nullable();
+
+            
+            $table->foreignId('debtor_id')->constrained('memberships')->onDelete('cascade');
+            $table->foreignId('creditor_id')->constrained('memberships')->onDelete('cascade');
             $table->timestamps();
         });
     }

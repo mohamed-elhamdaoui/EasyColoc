@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('memberships', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('colocation_id')->constrained()->onDelete('cascade');
+            $table->enum('role', ['OWNER', 'MEMBER'])->default('MEMBER');
+            $table->enum('status', ['ACTIVE', 'LEFT', 'BANNED'])->default('ACTIVE');
+            $table->decimal('balance', 10, 2)->default(0.00);
+            $table->timestamp('joined_at')->useCurrent();
+            $table->timestamp('left_at')->nullable();
             $table->timestamps();
         });
     }
