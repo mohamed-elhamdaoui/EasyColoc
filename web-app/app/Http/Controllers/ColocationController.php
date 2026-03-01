@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Membership;
 use App\Models\Colocation;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Category;
 
 class ColocationController extends Controller
 {
@@ -37,7 +38,7 @@ class ColocationController extends Controller
 
         return view('colocations.show', [
             'colocation' => $colocation,
-            'currentUserMembership' => $currentUserMembership, 
+            'currentUserMembership' => $currentUserMembership,
             'members' => $members
         ]);
     }
@@ -65,6 +66,20 @@ class ColocationController extends Controller
             'colocation_id' => $colocation->id,
             'role' => 'OWNER',
         ]);
+
+        $defaultCategories = [
+            'Courses',
+            'Loyer',
+            'Factures',
+            'Autre'
+        ];
+
+        foreach ($defaultCategories as $categoryName) {
+            Category::create([
+                'name' => $categoryName,
+                'colocation_id' => $colocation->id
+            ]);
+        }
 
         return redirect()->route('colocations.index')->with('success', 'Colocation creee');
     }
