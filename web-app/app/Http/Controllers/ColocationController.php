@@ -36,10 +36,16 @@ class ColocationController extends Controller
 
         $members = $colocation->memberships()->with('user')->get();
 
+        $expenses = \App\Models\Expense::where('colocation_id', $colocation->id)
+            ->with(['payer.user', 'category']) //
+            ->orderBy('expense_date', 'desc')
+            ->get();
+
         return view('colocations.show', [
             'colocation' => $colocation,
             'currentUserMembership' => $currentUserMembership,
-            'members' => $members
+            'members' => $members,
+            'expenses' => $expenses
         ]);
     }
 
